@@ -1,0 +1,76 @@
+/* =====================================================================
+   TWO TONE STUDIO — design tokens
+   Game-agnostic: reuse this file as-is in future studio games.
+   Rules: monochrome only · sans-serif only (one family) · 4 px spacing scale ·
+          every value used in components comes from here.
+   ===================================================================== */
+:root {
+  /* ---- colour (the whole palette) ---- */
+  --c-ink: #171717;
+  --c-ink-2: #252525;
+  --c-anth: #454545;
+  --c-mid: #777777;
+  --c-light: #aaaaaa;
+  --c-fog: #d8d8d8;
+  --c-paper: #f0efea;
+  --c-white: #ffffff;
+
+  /* ---- colour roles (UI sits on dark in every game state) ---- */
+  --bg: var(--c-ink);
+  --text: var(--c-paper);      /* primary text */
+  --text-2: var(--c-light);    /* secondary text */
+  --text-3: var(--c-mid);      /* tertiary: metadata, disabled */
+  --line: var(--c-anth);       /* hairlines, inactive strokes */
+  --strong: var(--c-white);    /* hover / emphasis */
+  --on-light: var(--c-ink);    /* text on a paper-coloured surface */
+  --veil: color-mix(in srgb, var(--c-ink) 92%, transparent); /* menu backdrop over the scene */
+
+  /* ---- typography: one family ---- */
+  --font: 'Inter Variable', Inter, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+  --w-regular: 400;
+  --w-medium: 500;
+  --w-semi: 600;
+  --w-bold: 700;
+
+  /* scale: display / heading / title / body / caption / micro */
+  --fs-display: clamp(56px, min(13vw, 15vh), 152px);
+  --fs-heading: clamp(32px, 4.6vw, 52px);
+  --fs-nav: clamp(26px, 3vw, 38px);
+  --fs-title: clamp(24px, 2.4vw, 30px);
+  --fs-body: 17px;
+  --fs-caption: 14px;
+  --fs-micro: 12px;
+  --lh-tight: 1;
+  --lh-snug: 1.15;
+  --lh-body: 1.55;
+  --ls-display: -0.05em;
+  --ls-heading: -0.035em;
+  --ls-title: -0.02em;
+  --ls-micro: 0.01em;
+
+  /* ---- spacing (4 px base) ---- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --gutter: clamp(24px, 8vw, 128px);
+  --rhythm: clamp(24px, 6vh, 64px); /* large vertical gap, shrinks on short screens */
+
+  /* ---- shape ---- */
+  --r: 0px;
+  --r-s: 2px;
+  --hair: 1px;
+  --stroke: 2px;
+  --target: 48px; /* minimum touch target */
+
+  /* ---- motion ---- */
+  --t-fast: 120ms;
+  --t-base: 240ms;
+  --t-slow: 480ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
