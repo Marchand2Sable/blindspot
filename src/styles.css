@@ -240,7 +240,13 @@ body.hud-on #keys { display: flex; }
 .tut-dots i.on { background: var(--text); border-color: var(--text); }
 .tut-need { color: var(--text) !important; font-weight: var(--w-semi); }
 .tut-need::before { content: '→ '; }
-.tut-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); margin-top: var(--s-2); flex-wrap: wrap; }
+.tut-need.ok::before { content: '✓ '; }
+.tut-card.compact { padding: var(--s-3) var(--s-4); gap: var(--s-2); }
+.tut-card.compact h3 { font-size: var(--fs-caption); }
+.tut-card.compact p { font-size: var(--fs-micro); }
+.tut-card.compact .tut-dots { display: none; }
+.tut-card.compact .tut-btn, .tut-card.compact .tut-link { min-height: 36px; }
+.tut-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); margin-top: var(--s-1); }
 .tut-end .tut-actions { flex-direction: column; align-items: stretch; }
 .tut-btn { min-height: var(--target); padding: 0 var(--s-5); border: var(--stroke) solid var(--text); color: var(--text); font-size: var(--fs-caption); font-weight: var(--w-semi); border-radius: 6px; transition: background var(--t-fast), color var(--t-fast), opacity var(--t-fast); }
 .tut-btn.primary { background: var(--text); color: var(--on-light); }
@@ -248,7 +254,7 @@ body.hud-on #keys { display: flex; }
 .tut-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .tut-link { color: var(--text-2); font-size: var(--fs-caption); min-height: var(--target); padding: 0 var(--s-2); transition: color var(--t-fast); }
 .tut-link:hover { color: var(--strong); }
-.tut-skip { align-self: flex-start; min-height: 0; padding: 0; font-size: var(--fs-micro); color: var(--text-3); }
+.tut-skip { color: var(--text-3); font-size: var(--fs-micro); }
 @media (prefers-reduced-motion: reduce) { .tut-hole { transition: none; } }
 
 /* narrow screens: title keeps the full left column, vision + pause stay on one row, the switch card drops under them */

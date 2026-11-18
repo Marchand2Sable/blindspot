@@ -184,6 +184,8 @@ export class GameEngine {
     this.tutorial = new Tutorial({
       world: () => this.world,
       tileRect: (a, b, c, d) => this.renderer.tileRect(a, b, c, d),
+      mapBox: (dock) => this.renderer.mapBox(this.world, dock),
+      setDock: (px) => (this.renderer.dockBottom = px),
       setFrozen: (on) => (this.tutorialFrozen = on),
       setSafe: (on) => (this.world.safe = on),
       finish: () => {
@@ -207,6 +209,7 @@ export class GameEngine {
   private endTutorial(): void {
     this.tutorial?.destroy();
     this.tutorial = null;
+    this.renderer.dockBottom = 0;
     this.tutorialFrozen = false;
   }
 

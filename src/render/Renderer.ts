@@ -89,7 +89,10 @@ export class Renderer {
     return { x: this.ox + x0 * this.ts, y: this.oy + y0 * this.ts, w: (x1 - x0) * this.ts, h: (y1 - y0) * this.ts };
   }
 
-  private layout(world: GameWorld): void {
+  /** Extra pixels kept free at the bottom (above the controls): the tutorial card docks there on small screens. */
+  dockBottom = 0;
+
+  private computeLayout(world: GameWorld, dock: number) {
     const { width, height } = world.level;
     // Room reserved for the editorial HUD (top) and the key legend / touch controls (bottom).
     const narrow = this.w < 760;
@@ -97,14 +100,41 @@ export class Renderer {
     // the HUD (title, guard legend, switch card) can be taller than the base inset: keep the map clear of it
     const hud = document.body.classList.contains('hud-on') ? document.getElementById('hud') : null;
     const hudBottom = hud ? hud.getBoundingClientRect().bottom + 12 : 0;
-    this.topInset = Math.max(narrow ? 104 : 148, Math.ceil(hudBottom));
-    this.bottomInset = touch ? (narrow ? 150 : 130) : 152;
+    const topInset = Math.max(narrow ? 104 : 148, Math.ceil(hudBottom));
+    const baseBottom = touch ? (narrow ? 150 : 130) : 152;
+    const bottomInset = baseBottom + dock;
     const side = narrow ? 24 : 64;
     const availW = this.w - side * 2;
-    const availH = Math.max(40, this.h - this.topInset - this.bottomInset);
-    this.ts = Math.max(12, Math.floor(Math.min(availW / width, availH / height)));
-    this.ox = Math.round((this.w - width * this.ts) / 2);
-    this.oy = Math.round(this.topInset + (availH - height * this.ts) / 2);
+    const availH = Math.max(40, this.h - topInset - bottomInset);
+    const ts = Math.max(12, Math.floor(Math.min(availW / width, availH / height)));
+    const ox = Math.round((this.w - width * ts) / 2);
+    const oy = Math.round(topInset + (availH - height * ts) / 2);
+    return { topInset, bottomInset, baseBottom, ts, ox, oy };
+  }
+
+  private layout(world: GameWorld): void {
+    const l = this.computeLayout(world, this.dockBottom);
+    this.topInset = l.topInset;
+    this.bottomInset = l.bottomInset;
+    this.ts = l.ts;
+    this.ox = l.ox;
+    this.oy = l.oy;
+  }
+
+  /**
+   * Where the map would be with `dock` extra pixels reserved at the bottom (pure: nothing is changed).
+   * `top` / `bottom` bound the band between the HUD and the controls, in CSS pixels.
+   */
+  mapBox(world: GameWorld, dock = 0): { x: number; y: number; w: number; h: number; top: number; bottom: number } {
+    const l = this.computeLayout(world, dock);
+    return {
+      x: l.ox,
+      y: l.oy,
+      w: world.level.width * l.ts,
+      h: world.level.height * l.ts,
+      top: l.topInset,
+      bottom: this.h - l.baseBottom,
+    };
   }
 
   private wallLayer(world: GameWorld): HTMLCanvasElement {
