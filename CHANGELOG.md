@@ -2,6 +2,16 @@
 
 All notable changes to BLINDSPOT. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions: [Semantic Versioning](https://semver.org/) (see `VERSIONING.md`).
 
+## [0.1.1] - 2026-11-18
+
+### Changed
+- Tutorial shortened from 10 to 5 steps; the action steps validate themselves, only the first has a "Suivant" button.
+- Tutorial card is placed beside, above or under the map (or in a docked band that shrinks the map on phones) so it never hides the level.
+
+### Fixed
+- Reaching the exit during the tutorial no longer freezes the level.
+- Tile and hitbox now match the displayed view on level 01.
+
 ## [0.1.0] - 2026-11-16
 
 First published version.
