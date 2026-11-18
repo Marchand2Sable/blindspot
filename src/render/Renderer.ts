@@ -91,8 +91,10 @@ export class Renderer {
 
   /** Extra pixels kept free at the bottom (above the controls): the tutorial card docks there on small screens. */
   dockBottom = 0;
+  /** Extra pixels kept free on the right: the tutorial card sits there when the screen is wide but short. */
+  dockRight = 0;
 
-  private computeLayout(world: GameWorld, dock: number) {
+  private computeLayout(world: GameWorld, dock: number, dockR: number) {
     const { width, height } = world.level;
     // Room reserved for the editorial HUD (top) and the key legend / touch controls (bottom).
     const narrow = this.w < 760;
@@ -104,16 +106,16 @@ export class Renderer {
     const baseBottom = touch ? (narrow ? 150 : 130) : 152;
     const bottomInset = baseBottom + dock;
     const side = narrow ? 24 : 64;
-    const availW = this.w - side * 2;
+    const availW = Math.max(40, this.w - side * 2 - dockR);
     const availH = Math.max(40, this.h - topInset - bottomInset);
     const ts = Math.max(12, Math.floor(Math.min(availW / width, availH / height)));
-    const ox = Math.round((this.w - width * ts) / 2);
+    const ox = Math.round(side + (availW - width * ts) / 2);
     const oy = Math.round(topInset + (availH - height * ts) / 2);
     return { topInset, bottomInset, baseBottom, ts, ox, oy };
   }
 
   private layout(world: GameWorld): void {
-    const l = this.computeLayout(world, this.dockBottom);
+    const l = this.computeLayout(world, this.dockBottom, this.dockRight);
     this.topInset = l.topInset;
     this.bottomInset = l.bottomInset;
     this.ts = l.ts;
@@ -125,8 +127,8 @@ export class Renderer {
    * Where the map would be with `dock` extra pixels reserved at the bottom (pure: nothing is changed).
    * `top` / `bottom` bound the band between the HUD and the controls, in CSS pixels.
    */
-  mapBox(world: GameWorld, dock = 0): { x: number; y: number; w: number; h: number; top: number; bottom: number } {
-    const l = this.computeLayout(world, dock);
+  mapBox(world: GameWorld, dock = 0, dockR = 0): { x: number; y: number; w: number; h: number; top: number; bottom: number } {
+    const l = this.computeLayout(world, dock, dockR);
     return {
       x: l.ox,
       y: l.oy,

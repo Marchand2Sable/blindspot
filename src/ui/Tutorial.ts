@@ -19,9 +19,9 @@ export interface TutorialHost {
   /** Tile rectangle -> screen pixels. */
   tileRect(x0: number, y0: number, x1: number, y1: number): Rect;
   /** Where the map would be with `dock` extra pixels reserved at the bottom (nothing changes). */
-  mapBox(dock: number): MapBox;
+  mapBox(dock: number, dockRight?: number): MapBox;
   /** Reserve pixels at the bottom of the screen: the map shrinks to leave room for the card. */
-  setDock(px: number): void;
+  setDock(px: number, right?: number): void;
   /** Freeze / unfreeze the simulation (guards, timers). */
   setFrozen(on: boolean): void;
   /** Guards cannot catch the player while true (explanations); false for the final crossing. */
@@ -299,7 +299,7 @@ export class Tutorial {
     if (this.completed) return this.centerCard();
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    this.card.classList.toggle('compact', vh < 560);
+    this.card.classList.toggle('compact', vh < 640);
     const box = this.host.mapBox(0);
     const place = (cw: number, x: number, y: number): void => {
       this.card.style.width = `${cw}px`;
@@ -344,8 +344,23 @@ export class Tutorial {
       place(cw, (vw - cw) / 2, box.y - GAP - ch);
       return;
     }
-    // 3. reserve a band: the map shrinks, the card sits in the freed room above the controls
+    // 3. reserve room: the map shrinks. Either a column on the right (wide, short screens) or a band at the bottom,
+    //    whichever leaves the bigger map.
     const dock = ch + GAP * 2;
+    const sideMargin = vw < 760 ? 24 : 64;
+    const cwR = Math.min(320, Math.floor(vw * 0.36));
+    const chR = fit(cwR);
+    if (cwR >= 240 && chR <= bandBottom - bandTop) {
+      const right = cwR + GAP;
+      const boxR = this.host.mapBox(0, right);
+      const boxB = this.host.mapBox(dock, 0);
+      if (boxR.w > boxB.w) {
+        this.host.setDock(0, right);
+        place(cwR, vw - sideMargin - cwR, boxR.y + boxR.h / 2 - chR / 2 < bandTop ? bandTop : boxR.y + boxR.h / 2 - chR / 2);
+        return;
+      }
+    }
+    fit(cw);
     this.host.setDock(dock);
     place(cw, (vw - cw) / 2, bandBottom - ch - GAP);
   }

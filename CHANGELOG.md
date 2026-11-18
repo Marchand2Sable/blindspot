@@ -2,6 +2,11 @@
 
 All notable changes to BLINDSPOT. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions: [Semantic Versioning](https://semver.org/) (see `VERSIONING.md`).
 
+## [0.1.2] - 2026-11-18
+
+### Fixed
+- Tutorial card no longer covers the level on wide but short windows (e.g. the itch.io frame): it moves to a column on the right and the map keeps its size.
+
 ## [0.1.1] - 2026-11-18
 
 ### Changed
